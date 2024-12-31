@@ -11,7 +11,7 @@ namespace F.___J._Library.Models
         [Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }
 
-        // Relacja z tabelą 'Book'
+        // relacja z tabelą 'Book' - 1 do WIELU
         public ICollection<Book> Books { get; set; }
     }
 }

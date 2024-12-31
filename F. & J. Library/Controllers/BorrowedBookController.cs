@@ -3,27 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace F.___J._Library.Controllers
 {
-    public class CategoryController : Controller
+    public class BorrowedBookController : Controller
     {
-        // GET: CategoryController
+        // GET: BorrowedBookController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: CategoryController/Details/5
+        // GET: BorrowedBookController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CategoryController/Create
+        // GET: BorrowedBookController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CategoryController/Create
+        // POST: BorrowedBookController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -38,13 +38,13 @@ namespace F.___J._Library.Controllers
             }
         }
 
-        // GET: CategoryController/Edit/5
+        // GET: BorrowedBookController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: CategoryController/Edit/5
+        // POST: BorrowedBookController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -59,13 +59,13 @@ namespace F.___J._Library.Controllers
             }
         }
 
-        // GET: CategoryController/Delete/5
+        // GET: BorrowedBookController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CategoryController/Delete/5
+        // POST: BorrowedBookController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

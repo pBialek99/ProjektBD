@@ -25,7 +25,13 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.IsBorrowed)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PublisherId)
             </th>
             <th></th>
         </tr>
@@ -46,7 +52,13 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.IsBorrowed)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.CategoryId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublisherId)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

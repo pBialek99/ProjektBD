@@ -18,12 +18,25 @@ namespace F.___J._Library.Models
         [Column(TypeName = "nvarchar(50)")]
         public string Description { get; set; }
 
-        // Klucz obcy -> na ID kategorii
+        // czy wypożyczona
+        [Column(TypeName = "bit")]
+        public bool IsBorrowed { get; set; }
+
+        // klucz obcy -> na ID kategorii
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
 
-        // właściwość nawigacyjna
-        public Category Category { get; set; }
+        // klucz obcy -> na ID wydawcy
+        [ForeignKey("Publisher")]
+        public int PublisherId { get; set; }
 
+        // właściwość nawigacyjna -> kategoria
+        public Category Category { get; set; }
+        
+        // właściwość nawigacyjna -> wypożyczona książka
+        public BorrowedBook BorrowedBook { get; set; }
+
+        // właściwość nawigacyjna -> wydawca
+        public Publisher Publisher { get; set; }
     }
 }

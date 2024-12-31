@@ -6,12 +6,12 @@ namespace F.___J._Library.Controllers
 {
     public class BookController : Controller
     {
-        // Testowe dane statyczne
+        // statyczne dane testowe
         private static List<Book> books = new List<Book>
         {
-            new Book { Id = 1, Title = "Book 1", Author = "John", Description = "Desc 1", CategoryId = 1 },
-            new Book { Id = 2, Title = "Book 2", Author = "Nathan", Description = "Desc 2", CategoryId = 2 },
-            new Book { Id = 3, Title = "Book 3", Author = "David", Description = "Desc 3", CategoryId = 3 }
+            new Book {Id = 1, Title = "Test Book 1", Author = "Author 1", Description = "Description 1", IsBorrowed = false, CategoryId = 1, PublisherId = 1},
+            new Book {Id = 2, Title = "Test Book 2", Author = "Author 2", Description = "Description 2", IsBorrowed = false, CategoryId = 2, PublisherId = 2},
+            new Book {Id = 3, Title = "Test Book 3", Author = "Author 3", Description = "Description 3", IsBorrowed = false, CategoryId = 3, PublisherId = 3}
         };
 
         // GET: BookController
@@ -23,13 +23,15 @@ namespace F.___J._Library.Controllers
         // GET: BookController/Details/5
         public ActionResult Details(int id)
         {
-            return View(books.FirstOrDefault(x => x.Id == id));
+            Book book = books.FirstOrDefault(x => x.Id == id);
+
+            return View(book);
         }
 
         // GET: BookController/Create
         public ActionResult Create()
         {
-            return View(new Book());
+            return View();
         }
 
         // POST: BookController/Create
@@ -37,15 +39,16 @@ namespace F.___J._Library.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Book book)
         {
-            book.Id = books.Count + 1;
+            book.Id = books.Max(b => b.Id) + 1;
             books.Add(book);
+
             return RedirectToAction(nameof(Index));
         }
 
         // GET: BookController/Edit/5
         public ActionResult Edit(int id)
-        {      
-            var book = books.FirstOrDefault(x => x.Id == id);
+        {
+            Book book = books.FirstOrDefault(b => b.Id == id);
 
             return View(book);
         }
@@ -55,11 +58,14 @@ namespace F.___J._Library.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Book updatedBook)
         {
-            Book book = books.FirstOrDefault(x => x.Id == id);
+            Book book = books.FirstOrDefault(b => b.Id == id);
+
             book.Title = updatedBook.Title;
             book.Author = updatedBook.Author;
             book.Description = updatedBook.Description;
+            book.IsBorrowed = updatedBook.IsBorrowed;
             book.CategoryId = updatedBook.CategoryId;
+            book.PublisherId = updatedBook.PublisherId;
 
             return RedirectToAction(nameof(Index));
         }
@@ -67,7 +73,7 @@ namespace F.___J._Library.Controllers
         // GET: BookController/Delete/5
         public ActionResult Delete(int id)
         {
-            var book = books.FirstOrDefault(x => x.Id == id);
+            Book book = books.First(b => b.Id == id);
 
             return View(book);
         }
@@ -77,7 +83,7 @@ namespace F.___J._Library.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
-            Book book = books.FirstOrDefault(x => x.Id == id);
+            Book book = books.FirstOrDefault(b => b.Id == id);
             books.Remove(book);
 
             return RedirectToAction(nameof(Index));
