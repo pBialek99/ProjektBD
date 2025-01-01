@@ -20,10 +20,18 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+// glowne
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+// dla ksiazek
+app.MapControllerRoute(
+    name: "book",
+    pattern: "Books/{action=Index}/{id?}")
+    .WithStaticAssets();
+    
 
 
 app.Run();

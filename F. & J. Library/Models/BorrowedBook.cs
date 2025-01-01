@@ -24,7 +24,7 @@ namespace F.___J._Library.Models
         //public string LastName { get; set; }
 
         // data wypożyczenia
-        public DateTime BorrowDate { get; set; }
+        public DateTime? BorrowDate { get; set; }
 
         // data oddania
         public DateTime? ReturnDate { get; set; }

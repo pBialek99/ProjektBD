@@ -25,7 +25,9 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsBorrowed)
+                <!-- wrzucenie tego tak, by nie wyświetlało się w sposób nazwy pola obiektu -->
+                @* @Html.DisplayNameFor(model => model.IsBorrowed) *@
+                Borrowed
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CategoryId)
@@ -61,9 +63,22 @@
                 @Html.DisplayFor(modelItem => item.PublisherId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+            <!-- Wypozyczanie -->
+            <td>
+                    <!-- jesli nie jest jeszcze wypozyczona -->
+                    @if (!item.IsBorrowed)
+                    {
+                        @Html.ActionLink("Borrow", "Borrow", new { id = item.Id }, new { @class = "btn btn-success" })
+                    }
+                    <!-- jesli jest juz wypozyczona -->
+                    @if (item.IsBorrowed)
+                    {
+                        @Html.ActionLink("Return", "Return", new { id = item.Id }, new { @class = "btn btn-danger" })
+                    }
             </td>
         </tr>
 }

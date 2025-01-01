@@ -7,9 +7,9 @@ namespace F.___J._Library.Controllers
     public class BookController : Controller
     {
         // statyczne dane testowe
-        private static List<Book> books = new List<Book>
+        public static List<Book> books = new List<Book>
         {
-            new Book {Id = 1, Title = "Test Book 1", Author = "Author 1", Description = "Description 1", IsBorrowed = false, CategoryId = 1, PublisherId = 1},
+            new Book {Id = 5, Title = "Test Book 1", Author = "Author 1", Description = "Description 1", IsBorrowed = false, CategoryId = 1, PublisherId = 1},
             new Book {Id = 2, Title = "Test Book 2", Author = "Author 2", Description = "Description 2", IsBorrowed = false, CategoryId = 2, PublisherId = 2},
             new Book {Id = 3, Title = "Test Book 3", Author = "Author 3", Description = "Description 3", IsBorrowed = false, CategoryId = 3, PublisherId = 3}
         };
@@ -23,7 +23,7 @@ namespace F.___J._Library.Controllers
         // GET: BookController/Details/5
         public ActionResult Details(int id)
         {
-            Book book = books.FirstOrDefault(x => x.Id == id);
+            Book book = books.FirstOrDefault(b => b.Id == id);
 
             return View(book);
         }
@@ -73,7 +73,7 @@ namespace F.___J._Library.Controllers
         // GET: BookController/Delete/5
         public ActionResult Delete(int id)
         {
-            Book book = books.First(b => b.Id == id);
+            var book = books.FirstOrDefault(b => b.Id == id);
 
             return View(book);
         }
@@ -87,6 +87,28 @@ namespace F.___J._Library.Controllers
             books.Remove(book);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // Akcja do wypozyczenia ksiazki
+        public ActionResult Borrow(int id)
+        {
+            Book book = books.FirstOrDefault(b => b.Id == id);
+            book.IsBorrowed = true;
+            BorrowedBookController.borrowedBooks.Add(new BorrowedBook { BookId = book.Id, Book = book, BorrowDate = DateTime.Now, ReturnDate = DateTime.Now.AddDays(30) });
+
+            return RedirectToAction("Index");
+        }
+
+        // Akcja do zwrotu ksiazki
+        public ActionResult Return(int id)
+        {
+            Book book = books.FirstOrDefault(b => b.Id == id && b.IsBorrowed);
+            BorrowedBook borrowedBook = BorrowedBookController.borrowedBooks.FirstOrDefault(b => b.BookId == id);
+            BorrowedBookController.borrowedBooks.Remove(borrowedBook);
+
+            book.IsBorrowed = false;
+
+            return RedirectToAction("Index");
         }
     }
 }
