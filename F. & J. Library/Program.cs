@@ -31,7 +31,19 @@ app.MapControllerRoute(
     name: "book",
     pattern: "Books/{action=Index}/{id?}")
     .WithStaticAssets();
-    
+
+// dla dla wypozyczonych
+app.MapControllerRoute(
+    name: "borrowedBook",
+    pattern: "BorrowedBook/{action=Index}/{id?}")
+    .WithStaticAssets();
+
+// dla kategorii
+app.MapControllerRoute(
+    name: "category",
+    pattern: "Cattegory/{action=Index}/{id?}")
+    .WithStaticAssets();
+
 
 
 app.Run();

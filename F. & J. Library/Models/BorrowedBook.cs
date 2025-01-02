@@ -9,10 +9,6 @@ namespace F.___J._Library.Models
         [ForeignKey("Book")]
         public int BookId { get; set; }
 
-        // właściwość nawigacyjna
-        // relacja z tabelą 'Book' - 1 do 1
-        public Book Book { get; set; }
-
         // id użytkownika (możliwe do edycji po dodaniu Identity)
         //[ForeignKey("User")]
         //public int UserId { get; set; }
@@ -28,5 +24,9 @@ namespace F.___J._Library.Models
 
         // data oddania
         public DateTime? ReturnDate { get; set; }
+
+        // właściwość nawigacyjna
+        // relacja z tabelą 'Book' - 1 do 1
+        public Book Book { get; set; }
     }
 }

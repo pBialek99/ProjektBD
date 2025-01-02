@@ -1,4 +1,5 @@
-﻿using F.___J._Library.Models;
+﻿using System.Linq;
+using F.___J._Library.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp;
@@ -14,7 +15,7 @@ namespace F.___J._Library.Controllers
         public static List<BorrowedBook> borrowedBooks = new List<BorrowedBook>();
         static BorrowedBookController()
         {
-            foreach (var book in BookController.books.Where(b => b.IsBorrowed))
+            foreach (var book in BookController.books.Where(b => b.IsBorrowed && !borrowedBooks.Any(bb => bb.BookId == b.Id)))
             {
                 borrowedBooks.Add(new BorrowedBook { BookId = book.Id, Book = book });
             }
