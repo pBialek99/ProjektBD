@@ -10,9 +10,9 @@ namespace F.___J._Library.Controllers
         // statyczne dane testowe
         public static List<Book> books = new List<Book>
         {
-            new Book {Id = 1, Title = "Test Book 1", Author = "Author 1", Description = "Description 1", IsBorrowed = false, CategoryId = 1},
-            new Book {Id = 2, Title = "Test Book 2", Author = "Author 2", Description = "Description 2", IsBorrowed = false, CategoryId = 2},
-            new Book {Id = 3, Title = "Test Book 3", Author = "Author 3", Description = "Description 3", IsBorrowed = false, CategoryId = 3}
+            new Book {Id = 1, Title = "Test Book 1", Author = "Author 1", Description = "Description 1", IsBorrowed = false, CategoryId = 1, PublisherId = 1},
+            new Book {Id = 2, Title = "Test Book 2", Author = "Author 2", Description = "Description 2", IsBorrowed = false, CategoryId = 2, PublisherId = 2},
+            new Book {Id = 3, Title = "Test Book 3", Author = "Author 3", Description = "Description 3", IsBorrowed = false, CategoryId = 3, PublisherId = 3}
         };
 
         // GET: BookController
@@ -33,6 +33,7 @@ namespace F.___J._Library.Controllers
         public ActionResult Create()
         {
             ViewBag.Categories = new SelectList(CategoryController.categories, "Id", "Name");
+            ViewBag.Publishers = new SelectList(PublisherController.publishers, "Id", "Name");
 
             return View();
         }
@@ -54,6 +55,7 @@ namespace F.___J._Library.Controllers
         {
             Book book = books.FirstOrDefault(b => b.Id == id);
             ViewBag.Categories = new SelectList(CategoryController.categories, "Id", "Name", book.CategoryId);
+            ViewBag.Publishers = new SelectList(PublisherController.publishers, "Id", "Name", book.PublisherId);
 
             return View(book);
         }
@@ -70,6 +72,7 @@ namespace F.___J._Library.Controllers
             book.Description = updatedBook.Description;
             book.IsBorrowed = updatedBook.IsBorrowed;
             book.CategoryId = updatedBook.CategoryId;
+            book.PublisherId = updatedBook.PublisherId;
 
             return RedirectToAction(nameof(Index));
         }

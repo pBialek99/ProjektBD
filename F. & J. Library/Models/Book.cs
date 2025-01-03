@@ -22,14 +22,21 @@ namespace F.___J._Library.Models
         [Column(TypeName = "bit")]
         public bool IsBorrowed { get; set; }
 
-        // właściwość nawigacyjna -> wypożyczona książka
-        public BorrowedBook BorrowedBook { get; set; }
-
         // klucz obcy dla kategorii
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
 
+        // klucz obcy dla wydawcy
+        [ForeignKey("Publisher")]
+        public int PublisherId { get; set; }
+
+        // właściwość nawigacyjna -> wypożyczona książka
+        public BorrowedBook BorrowedBook { get; set; }
+
         // wlasciwosc nawigacyjna -> kategoria
         public Category Category { get; set; }
+
+        // wlasciwosc nawigacyjna -> wydawca
+        public Publisher Publisher { get; set; }
     }
 }

@@ -32,6 +32,9 @@
             <th>
                 @Html.DisplayNameFor(Model => Model.Category)
             </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.Publisher)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -56,6 +59,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryId)
             </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.PublisherId)
+            </th>
             <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |

@@ -44,6 +44,12 @@ app.MapControllerRoute(
     pattern: "Cattegory/{action=Index}/{id?}")
     .WithStaticAssets();
 
+// dla wydawcy
+app.MapControllerRoute(
+    name: "publisher",
+    pattern: "Publisher/{action=Index}/{id?}")
+    .WithStaticAssets();
+
 
 
 app.Run();

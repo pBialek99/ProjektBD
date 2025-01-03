@@ -44,6 +44,14 @@
                 </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
+            <!-- Tu na PublisherId -->
+            <div class="form-group">
+                <label asp-for="PublisherId" class="control-label">Publisher</label>
+                <select asp-for="PublisherId" class="form-control" asp-items="ViewBag.Publishers">
+                    <option value="">Select a publisher</option>
+                </select>
+                <span asp-validation-for="PublisherId" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
