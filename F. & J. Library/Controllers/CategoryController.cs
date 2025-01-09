@@ -8,24 +8,30 @@ namespace F.___J._Library.Controllers
     public class CategoryController : Controller
     {
         // statyczna lista
-        public static List<Category> categories = new List<Category>
+        //public static List<Category> categories = new List<Category>
+        //{
+        //    new Category {Id = 1, Name = "Genre 1"},
+        //    new Category {Id = 2, Name = "Genre 2"},
+        //    new Category {Id = 3, Name = "Genre 3"},
+        //};
+
+        // bazodanowy kontekst
+        private readonly LibraryDbContext _context;
+        public CategoryController(LibraryDbContext context)
         {
-            new Category {Id = 1, Name = "Genre 1"},
-            new Category {Id = 2, Name = "Genre 2"},
-            new Category {Id = 3, Name = "Genre 3"},
-        };
+            _context = context;
+        }
 
         // GET: CategoryController
         public ActionResult Index()
         {
-            return View(categories);
+            return View(_context.Categories.ToList());
         }
 
         // GET: CategoryController/Details/5
         public ActionResult Details(int id)
         {
-            Console.WriteLine($"Looking for category with id {id}.");
-            Category category = categories.FirstOrDefault(c => c.Id == id);
+            Category category = _context.Categories.Find(id);
 
             return View(category);
         }
@@ -41,8 +47,8 @@ namespace F.___J._Library.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Category category)
         {
-            category.Id = categories.Max(c => c.Id) + 1;
-            categories.Add(category);
+            _context.Categories.Add(category);
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -50,7 +56,7 @@ namespace F.___J._Library.Controllers
         // GET: CategoryController/Edit/5
         public ActionResult Edit(int id)
         {
-            Category category = categories.FirstOrDefault(c => c.Id == id);
+            Category category = _context.Categories.Find(id);
 
             if (category == null)
             {
@@ -65,16 +71,10 @@ namespace F.___J._Library.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Category updatedCategory)
         {
-            Category category = categories.FirstOrDefault(c => c.Id == id);
+            //Category category = _context.Categories.Find(id);
 
-            if (category == null)
-            {
-                // Obsłuż sytuację, gdy kategoria nie została znaleziona
-                ModelState.AddModelError(string.Empty, "Category not found.");
-                return View(updatedCategory);
-            }
-
-            category.Name = updatedCategory.Name;
+            _context.Categories.Update(updatedCategory);
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -82,7 +82,7 @@ namespace F.___J._Library.Controllers
         // GET: CategoryController/Delete/5
         public ActionResult Delete(int id)
         {
-            Category category = categories.FirstOrDefault(c => c.Id == id);
+            Category category = _context.Categories.Find(id);
 
             return View(category);
         }
@@ -90,10 +90,10 @@ namespace F.___J._Library.Controllers
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Category category)
         {
-            Category category = categories.FirstOrDefault(c => c.Id == id);
-            categories.Remove(category);
+            _context.Categories.Remove(category);
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
