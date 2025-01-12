@@ -29,8 +29,6 @@ namespace F.___J._Library.Controllers
         // GET: BookController/Create
         public ActionResult Create()
         {
-            // TO TRZEBA ZMIENIC NA _context.Categories.ToList() BO NA RAZIE WYSWIETLA ZE STATYCZNEJ
-
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.Publishers = new SelectList(_context.Publishers, "Id", "Name");
 
@@ -65,6 +63,28 @@ namespace F.___J._Library.Controllers
         public ActionResult Edit(int id, Book updatedBook)
         {
             _context.Books.Update(updatedBook);
+
+
+            if (updatedBook.IsBorrowed && !_context.BorrowedBooks.Any(bb => bb.BookId == id))
+            {
+                var borrowedBook = new BorrowedBook
+                {
+                    BookId = id,
+                    BorrowDate = DateTime.Now,
+                    ReturnDate = DateTime.Now.AddDays(30)
+                };
+                _context.BorrowedBooks.Add(borrowedBook);
+            }
+
+            if (!updatedBook.IsBorrowed)
+            {
+                var borrowedBook = _context.BorrowedBooks.SingleOrDefault(bb => bb.BookId == id);
+                if (borrowedBook != null)
+                {
+                    _context.BorrowedBooks.Remove(borrowedBook);
+                }
+            }
+
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
