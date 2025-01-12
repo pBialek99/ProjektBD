@@ -1,4 +1,5 @@
 ﻿using F.___J._Library.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,18 +16,21 @@ namespace F.___J._Library.Controllers
         }
 
         // GET: BookController
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View(_context.Books.ToList());
         }
 
         // GET: BookController/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
             return View(_context.Books.Find(id));
         }
 
         // GET: BookController/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
@@ -37,6 +41,7 @@ namespace F.___J._Library.Controllers
 
         // POST: BookController/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Book book)
         {
@@ -48,6 +53,7 @@ namespace F.___J._Library.Controllers
         }
 
         // GET: BookController/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id)
         {
             Book book = _context.Books.FirstOrDefault(b => b.Id == id);
@@ -59,6 +65,7 @@ namespace F.___J._Library.Controllers
 
         // POST: BookController/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Book updatedBook)
         {
@@ -91,6 +98,7 @@ namespace F.___J._Library.Controllers
         }
 
         // GET: BookController/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
             Book book = _context.Books.Find(id);
@@ -101,6 +109,7 @@ namespace F.___J._Library.Controllers
 
         // POST: BookController/Delete/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Book book)
         {
@@ -111,6 +120,7 @@ namespace F.___J._Library.Controllers
         }
 
         // Akcja do wypozyczenia ksiazki
+        [Authorize(Roles = "User")]
         public ActionResult Borrow(int id)
         {
             Book book = _context.Books.Find(id);
@@ -130,6 +140,7 @@ namespace F.___J._Library.Controllers
         }
 
         // Akcja do zwrotu ksiazki
+        [Authorize(Roles = "User")]
         public ActionResult Return(int id)
         {
             Book book = _context.Books.Find(id);

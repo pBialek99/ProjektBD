@@ -1,20 +1,14 @@
 ﻿using F.___J._Library.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace F.___J._Library.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
-        // statyczna lista
-        //public static List<Category> categories = new List<Category>
-        //{
-        //    new Category {Id = 1, Name = "Genre 1"},
-        //    new Category {Id = 2, Name = "Genre 2"},
-        //    new Category {Id = 3, Name = "Genre 3"},
-        //};
-
         // bazodanowy kontekst
         private readonly LibraryDbContext _context;
         public CategoryController(LibraryDbContext context)
