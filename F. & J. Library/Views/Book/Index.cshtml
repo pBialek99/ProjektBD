@@ -1,10 +1,15 @@
 ﻿@model IEnumerable<F.___J._Library.Models.Book>
+@using Microsoft.AspNetCore.Identity
+@using F.___J._Library.Models
+
+@inject UserManager<DefaultUser> UserManager
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>List of books to borrow</h1>
+@{var currentUserId = UserManager.GetUserId(User);}
 
 <p>
     @if (User.IsInRole("Admin"))
@@ -55,11 +60,11 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
+                @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
-            <th>
-                @Html.DisplayFor(modelItem => item.PublisherId)
-            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publisher.Name)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsBorrowed)
             </td>
@@ -91,11 +96,16 @@
                     {
                         @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
                         {
-                            @Html.ActionLink("Return", "Return", new { id = item.Id }, new { @class = "btn btn-danger" })
+                            @if (item.BorrowedBook.UserId == currentUserId)
+                            {
+                                @Html.ActionLink("Return", "Return", new { id = item.Id }, new { @class = "btn btn-danger" })
+
+                            }
                         }
                     }
             </td>
         </tr>
-}
+}   
+    
     </tbody>
 </table>

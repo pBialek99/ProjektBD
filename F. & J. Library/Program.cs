@@ -1,6 +1,7 @@
 using F.___J._Library.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +89,12 @@ static async Task SeedData(IServiceProvider serviceProvider)
 
     var adminEmail = "admin@mail.com";
     var adminPassword = "qwertY1#";
+    var firstName = "Gary";
+    var lastName = "Gray";
+    var street = "Normal st. 8";
+    var city = "Krakow";
+    var phoneNumber = "123456789";
+
 
     if (await userManager.FindByEmailAsync(adminEmail) == null)
     {
@@ -95,6 +102,11 @@ static async Task SeedData(IServiceProvider serviceProvider)
         {
             UserName = adminEmail,
             Email = adminEmail,
+            FirstName = firstName,
+            LastName = lastName,
+            Street = street,
+            City = city,
+            PhoneNumber = phoneNumber,
             EmailConfirmed = true
         };
 

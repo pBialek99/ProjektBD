@@ -1,8 +1,11 @@
-﻿using F.___J._Library.Models;
+﻿using System.Security.Claims;
+using F.___J._Library.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace F.___J._Library.Controllers
 {
@@ -19,14 +22,28 @@ namespace F.___J._Library.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View(_context.Books.ToList());
+            var books = _context.Books
+                        .Include(b => b.BorrowedBook)           // robimy EagerLoading
+                            .ThenInclude(b => b.DefaultUser)    // dla uzytkownika
+                        .Include(b => b.Category)               // dla kategorii
+                        .Include(b => b.Publisher)              // dla wydawcy
+                        .ToList();
+
+            return View(books);
         }
 
         // GET: BookController/Details/5
         [AllowAnonymous]
         public ActionResult Details(int id)
         {
-            return View(_context.Books.Find(id));
+            var book = _context.Books                           // robimy EagerLoading
+                       .Include(b => b.Category)                // dla kategorii
+                       .Include(b => b.Publisher)               // dla wydawcy
+                       .Include(b => b.BorrowedBook)            // dla wypozyczonej ksiazki
+                           .ThenInclude(bb => bb.DefaultUser)   //dla uzytkownika DefaultUser
+                       .FirstOrDefault(b => b.Id == id);
+
+            return View(book);
         }
 
         // GET: BookController/Create
@@ -101,7 +118,12 @@ namespace F.___J._Library.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
-            Book book = _context.Books.Find(id);
+            var book = _context.Books                           // robimy EagerLoading
+                       .Include(b => b.Category)                // dla kategorii
+                       .Include(b => b.Publisher)               // dla wydawcy
+                       .Include(b => b.BorrowedBook)            // dla wypozyczonej ksiazki
+                           .ThenInclude(bb => bb.DefaultUser)   //dla uzytkownika DefaultUser
+                       .FirstOrDefault(b => b.Id == id);
 
 
             return View(book);
@@ -131,6 +153,7 @@ namespace F.___J._Library.Controllers
                 BookId = book.Id,
                 BorrowDate = DateTime.Now,
                 ReturnDate = DateTime.Now.AddDays(30),
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
 
             _context.BorrowedBooks.Add(borrowedBook);

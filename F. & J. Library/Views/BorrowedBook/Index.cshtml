@@ -4,12 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>List of currently borrowed books</h1>
 
 <p>
     @if (User.IsInRole("Admin"))
     {
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create">Add book to list of borrowed books</a>
     }
 </p>
 <table class="table">
@@ -19,39 +19,51 @@
                 @Html.DisplayNameFor(model => model.BookId)
             </th>
             <th>
+                Book Title
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.BorrowDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ReturnDate)
             </th>
-            <th></th>
+            <th>
+                Borrowed by
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BorrowDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReturnDate)
-            </td>
-            <td>
-                @if (User.IsInRole("Admin")) 
-                {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.BookId })
-                }
-                @Html.ActionLink("Details", "Details", new { id = item.BookId })
-                
-                @if (User.IsInRole("Admin")) 
-                {
-                    @Html.ActionLink("Delete", "Delete", new { id = item.BookId })
-                }
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BorrowDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReturnDate)
+                </td>
+                <td>
+                     @item.DefaultUser.FirstName @item.DefaultUser.LastName
+                </td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.BookId })
+                    }
+                    @Html.ActionLink("Details", "Details", new { id = item.BookId })
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Delete", "Delete", new { id = item.BookId })
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

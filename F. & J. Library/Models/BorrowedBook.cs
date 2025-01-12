@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace F.___J._Library.Models
 {
@@ -9,24 +10,21 @@ namespace F.___J._Library.Models
         [ForeignKey("Book")]
         public int BookId { get; set; }
 
-        // id użytkownika (możliwe do edycji po dodaniu Identity)
-        //[ForeignKey("User")]
-        //public int UserId { get; set; }
-
-        //[Column(TypeName = "nvarchar(50)")]
-        //public string FirstName { get; set; }
-
-        //[Column(TypeName = "nvarchar(50)")]
-        //public string LastName { get; set; }
-
         // data wypożyczenia
         public DateTime? BorrowDate { get; set; }
 
         // data oddania
         public DateTime? ReturnDate { get; set; }
 
+        [ForeignKey("DefaultUser")]
+        public string UserId { get; set; }
+
         // właściwość nawigacyjna
-        // relacja z tabelą 'Book' - 1 do 1
+        // relacja z tabelą 'AspNetUsers' - 1 do 1
         public Book Book { get; set; }
+
+        // właściwość nawigacyjna
+        // relacja z tabelą 'User' - 1 do 1
+        public DefaultUser DefaultUser { get; set; }
     }
 }

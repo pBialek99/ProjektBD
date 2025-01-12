@@ -98,6 +98,33 @@ namespace F.___J._Library.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            // customowe pola z modelu
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(50, ErrorMessage = "Max 50 characters")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(50, ErrorMessage = "Max 50 characters")]
+            public string LastName { get; set; }
+
+            [Required]
+            [Display(Name = "Street")]
+            [StringLength(50, ErrorMessage = "Max 50 characters")]
+            public string Street { get; set; }
+
+            [Required]
+            [Display(Name = "City")]
+            [StringLength(50, ErrorMessage = "Max 50 characters")]
+            public string City { get; set; }
+
+            [Required]
+            [Display(Name = "Phone Number")]
+            [RegularExpression(@"^\d{9}$", ErrorMessage = "The phone number must contain exactly 9 digits.")]
+            [StringLength(50, ErrorMessage = "Max 9 characters")]
+            public string PhoneNumber { get; set; }
         }
 
 
@@ -114,6 +141,11 @@ namespace F.___J._Library.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.Street = Input.Street;
+                user.City = Input.City;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -122,6 +154,8 @@ namespace F.___J._Library.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, "User");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

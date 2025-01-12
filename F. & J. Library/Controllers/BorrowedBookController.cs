@@ -1,9 +1,14 @@
 ﻿using System.Linq;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Claims;
 using F.___J._Library.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace F.___J._Library.Controllers
@@ -22,14 +27,22 @@ namespace F.___J._Library.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View(_context.BorrowedBooks.ToList());
+            var borrowedBooks = _context.BorrowedBooks
+                .Include(bb => bb.DefaultUser)
+                .Include(bb => bb.Book)
+                .ToList();
+
+            return View(borrowedBooks);
         }
 
         // GET: BorrowedBookController/Details/5
         [AllowAnonymous]
         public ActionResult Details(int id)
         {
-            BorrowedBook borrowedBook = _context.BorrowedBooks.Find(id);
+            var borrowedBook = _context.BorrowedBooks
+                .Include(bb => bb.DefaultUser)
+                .Include(bb => bb.Book)
+                .FirstOrDefault(bb => bb.BookId == id);
 
             return View(borrowedBook);
         }
@@ -38,6 +51,12 @@ namespace F.___J._Library.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+            var notBorrowedBooks = _context.Books
+                                 .Where(b => !b.IsBorrowed)
+                                 .ToList();
+
+            ViewBag.Books = new SelectList(notBorrowedBooks, "Id", "Title");
+
             return View();
         }
 
@@ -48,6 +67,7 @@ namespace F.___J._Library.Controllers
         public ActionResult Create(BorrowedBook borrowedBook)
         {
             Book book = _context.Books.FirstOrDefault(b => b.Id == borrowedBook.BookId);
+            borrowedBook.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             book.IsBorrowed = true;
 
             _context.BorrowedBooks.Add(borrowedBook);
@@ -87,7 +107,10 @@ namespace F.___J._Library.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
-            BorrowedBook borrowedBook = _context.BorrowedBooks.Find(id);
+            var borrowedBook = _context.BorrowedBooks
+                .Include(bb => bb.DefaultUser)
+                .Include(bb => bb.Book)
+                .FirstOrDefault(bb => bb.BookId == id);
 
             return View(borrowedBook);
         }
