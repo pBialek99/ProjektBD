@@ -1,5 +1,6 @@
 using F.___J._Library.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,11 @@ builder.Services.AddControllersWithViews();
 
 // RZECZY BAZODANOWE -- START
 builder.Services.AddDbContext<LibraryDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+
+builder.Services.AddDefaultIdentity<DefaultUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<LibraryDbContext>();
 // RZECZY BAZODANOWE ---- END
+
+//builder.Services.AddDefaultIdentity<DefaultUser>().AddEntityFrameworkStores<LibraryDbContext>();
 
 var app = builder.Build();
 
@@ -24,9 +29,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapRazorPages();
 app.MapStaticAssets();
 
 // glowne

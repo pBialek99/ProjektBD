@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace F.___J._Library.Models
 {
-    public class LibraryDbContext : DbContext
+    public class LibraryDbContext : IdentityDbContext<DefaultUser>
     {
         public LibraryDbContext(DbContextOptions<LibraryDbContext>options) : base(options) { }
         
